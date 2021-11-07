@@ -86,6 +86,15 @@ class Pesapal
     }
 
 
+    //instatnt push notification
+    public function ipn($pesapal_merchant_reference, $pesapal_transaction_tracking_id, $pesapalnotification)
+    {
+        if ($pesapalnotification == "CHANGE" && $pesapal_transaction_tracking_id != '') {
+            $status = $this->queryStatus($pesapal_merchant_reference, $pesapal_transaction_tracking_id);
+            return $status;
+        }
+    }
+
     //this functionality queries for status of the transaction
     public function queryStatus($pesapal_merchant_reference, $pesapal_transaction_tracking_id)
     {
