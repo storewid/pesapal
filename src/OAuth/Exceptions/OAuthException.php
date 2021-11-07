@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Created by PhpStorm.
  * User: epmnzava
@@ -6,7 +7,7 @@
  * Time: 2:23 AM
  */
 
-namespace Epmnzava\Pesapal\OAuth\Exceptions;
+namespace Storewid\Pesapal\OAuth\Exceptions;
 
 
 use Exception;
@@ -14,7 +15,7 @@ use Exception;
 /**
  * Class OAuthException
  *
- * @package  Epmnzava\Pesapal\OAuth\Exceptions
+ * @package  Storewid\Pesapal\OAuth\Exceptions
  */
 class OAuthException extends Exception
 {

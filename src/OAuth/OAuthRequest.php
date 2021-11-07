@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Created by PhpStorm.
  * User: mxgel
@@ -6,15 +7,15 @@
  * Time: 2:31 AM
  */
 
-namespace Epmnzava\Pesapal\OAuth;
+namespace Storewid\Pesapal\OAuth;
 
-use Epmnzava\Pesapal\OAuth\Exceptions\OAuthException;
+use Storewid\Pesapal\OAuth\Exceptions\OAuthException;
 
 
 /**
  * Class OAuthRequest
  *
- * @package Epmnzava\Pesapal\OAuth
+ * @package Storewid\Pesapal\OAuth
  */
 class OAuthRequest
 {
@@ -88,9 +89,12 @@ class OAuthRequest
 
             // It's a POST request of the proper content-type, so parse POST
             // parameters and add those overriding any duplicates from GET
-            if ($http_method == "POST"
-                && @strstr($request_headers["Content-Type"],
-                    "application/x-www-form-urlencoded")
+            if (
+                $http_method == "POST"
+                && @strstr(
+                    $request_headers["Content-Type"],
+                    "application/x-www-form-urlencoded"
+                )
             ) {
                 $post_data = OAuthUtil::parse_parameters(
                     file_get_contents(self::$POST_INPUT)
@@ -106,7 +110,6 @@ class OAuthRequest
                 );
                 $parameters = array_merge($parameters, $header_parameters);
             }
-
         }
 
         return new OAuthRequest($http_method, $http_url, $parameters);
@@ -352,16 +355,16 @@ class OAuthRequest
      */
     private static function generate_nonce()
     {
-        mt_srand((double)microtime() * 10000);//optional for php 4.2.0 and up.
+        mt_srand((float)microtime() * 10000); //optional for php 4.2.0 and up.
         $charid = strtoupper(md5(uniqid(rand(), true)));
-        $hyphen = chr(45);// "-"
-        $uuid = chr(123)// "{"
+        $hyphen = chr(45); // "-"
+        $uuid = chr(123) // "{"
             . substr($charid, 0, 8) . $hyphen
             . substr($charid, 8, 4) . $hyphen
             . substr($charid, 12, 4) . $hyphen
             . substr($charid, 16, 4) . $hyphen
             . substr($charid, 20, 12)
-            . chr(125);// "}"
+            . chr(125); // "}"
         return $uuid;
     }
 }

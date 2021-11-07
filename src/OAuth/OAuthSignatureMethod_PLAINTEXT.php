@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Created by PhpStorm.
  * User: mxgel
@@ -6,13 +7,13 @@
  * Time: 2:29 AM
  */
 
-namespace Epmnzava\Pesapal\OAuth;
+namespace Storewid\Pesapal\OAuth;
 
 
 /**
  * Class OAuthSignatureMethod_PLAINTEXT
  *
- * @package Epmnzava\Pesapal\OAuth
+ * @package Storewid\Pesapal\OAuth
  */
 class OAuthSignatureMethod_PLAINTEXT extends OAuthSignatureMethod
 {

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Created by PhpStorm.
  * User: mxgel
@@ -6,10 +7,10 @@
  * Time: 2:30 AM
  */
 
-namespace Epmnzava\Pesapal\OAuth;
+namespace Storewid\Pesapal\OAuth;
 
 
-use Epmnzava\Pesapal\OAuth\Exceptions\OAuthException;
+use Storewid\Pesapal\OAuth\Exceptions\OAuthException;
 
 /**
  * Class OAuthSignatureMethod_RSA_SHA1

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Created by PhpStorm.
  * User: mxgel
@@ -6,15 +7,15 @@
  * Time: 2:31 AM
  */
 
-namespace Epmnzava\Pesapal\OAuth;
+namespace Storewid\Pesapal\OAuth;
 
 
-use Epmnzava\Pesapal\OAuth\Exceptions\OAuthException;
+use Storewid\Pesapal\OAuth\Exceptions\OAuthException;
 
 /**
  * Class OAuthServer
  *
- * @package Epmnzava\Pesapal\OAuth
+ * @package Storewid\Pesapal\OAuth
  */
 class OAuthServer
 {
@@ -141,13 +142,14 @@ class OAuthServer
         if (!$signature_method) {
             $signature_method = "PLAINTEXT";
         }
-        if (!in_array($signature_method,
-            array_keys($this->signature_methods))
-        ) {
+        if (!in_array(
+            $signature_method,
+            array_keys($this->signature_methods)
+        )) {
             throw new OAuthException(
                 "Signature method '$signature_method' not supported " .
-                "try one of the following: " .
-                implode(", ", array_keys($this->signature_methods))
+                    "try one of the following: " .
+                    implode(", ", array_keys($this->signature_methods))
             );
         }
 
@@ -179,7 +181,9 @@ class OAuthServer
     {
         $token_field = @$request->get_parameter('oauth_token');
         $token = $this->data_store->lookup_token(
-            $consumer, $token_type, $token_field
+            $consumer,
+            $token_type,
+            $token_field
         );
         if (!$token) {
             throw new OAuthException("Invalid $token_type token: $token_field");

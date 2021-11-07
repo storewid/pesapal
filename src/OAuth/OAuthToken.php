@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Created by PhpStorm.
  * User: mxgel
@@ -6,13 +7,13 @@
  * Time: 2:26 AM
  */
 
-namespace Epmnzava\Pesapal\OAuth;
+namespace Storewid\Pesapal\OAuth;
 
 
 /**
  * Class OAuthToken
  *
- * @package Epmnzava\Pesapal\OAuth
+ * @package Storewid\Pesapal\OAuth
  */
 class OAuthToken
 {
@@ -43,9 +44,9 @@ class OAuthToken
     function to_string()
     {
         return "oauth_token=" .
-        OAuthUtil::urlencode_rfc3986($this->key) .
-        "&oauth_token_secret=" .
-        OAuthUtil::urlencode_rfc3986($this->secret);
+            OAuthUtil::urlencode_rfc3986($this->key) .
+            "&oauth_token_secret=" .
+            OAuthUtil::urlencode_rfc3986($this->secret);
     }
 
     /**
