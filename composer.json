@@ -1,0 +1,42 @@
+{
+    "name": "storewid/pesapal",
+    "description": "Php library wrapper for pesapal",
+    "keywords": [
+        "storewid",
+        "pesapal"
+    ],
+    "homepage": "https://github.com/storewid/pesapal",
+    "license": "MIT",
+    "type": "library",
+    "authors": [
+        {
+            "name": "Storewid",
+            "email": "devs@storewid.com",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^7.4|^8.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Storewid\\Pesapal\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Storewid\\Pesapal\\Tests\\": "tests"
+        }
+    },
+    "scripts": {
+        "test": "vendor/bin/phpunit",
+        "test-coverage": "vendor/bin/phpunit --coverage-html coverage"
+
+    },
+    "config": {
+        "sort-packages": true
+    }
+}
