@@ -1,4 +1,4 @@
-# Very short description of the package
+This is a php library for intergrating with - [pesapal service] (https://developer.pesapal.com/) More information of this can be found here
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/storewid/pesapal.svg?style=flat-square)](https://packagist.org/packages/storewid/pesapal)
 [![Total Downloads](https://img.shields.io/packagist/dt/storewid/pesapal.svg?style=flat-square)](https://packagist.org/packages/storewid/pesapal)
@@ -17,7 +17,29 @@ composer require storewid/pesapal
 ## Usage
 
 ```php
-// Usage description here
+<?php
+
+namespace App\Http\Controllers;
+
+use   Storewid\Pesapal;
+
+use Illuminate\Http\Request;
+class TransactionController extends Controller
+{
+//
+
+
+    public function customer_makepayment(){
+
+
+      $payment=new Pesapal($key, $secret, $endpoint, $currency, $callback,null);
+
+     $response=$payment->processpayment($firstname, $lastname, $phone_number, $email, $amount, $description, $reference, $type = "MERCHANT");
+
+   //response will be an iframe
+    echo  $response;
+
+    }
 ```
 
 ### Testing
@@ -40,13 +62,10 @@ If you discover any security related issues, please email devs@storewid.com inst
 
 ## Credits
 
--   [Storewid](https://github.com/storewid)
--   [All Contributors](../../contributors)
+- [Storewid](https://github.com/storewid)
+- [Emmanuel Mnzava](https://github.com/dbrax)
+- [All Contributors](../../contributors)
 
 ## License
 
 The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
-
-## PHP Package Boilerplate
-
-This package was generated using the [PHP Package Boilerplate](https://laravelpackageboilerplate.com) by [Beyond Code](http://beyondco.de/).

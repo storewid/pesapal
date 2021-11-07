@@ -38,7 +38,7 @@ class Pesapal
         $this->token = $token;
     }
 
-    public function processpayment($firstname, $lastname, $phone_number, $email, $amount, $description, $reference, $type = "MERCHANT",)
+    public function processpayment($firstname, $lastname, $phone_number, $email, $amount, $description, $reference, $type = "MERCHANT")
     {
         $this->firstname = $firstname;
         $this->lastname = $lastname;
@@ -85,6 +85,62 @@ class Pesapal
         return '<iframe src="' . $iframe_src . '" width="' . $params['width'] . '" height="' .  $params['height'] . '" scrolling="auto" frameBorder="0"> <p>Unable to load the payment page</p> </iframe>';
     }
 
+
+    //this functionality queries for status of the transaction
+    public function queryStatus($pesapal_merchant_reference, $pesapal_transaction_tracking_id)
+    {
+        $params = NULL;
+
+        $consumer = new OAuthConsumer($this->key, $this->secret);
+
+        $signature_method = new OAuthSignatureMethod_HMAC_SHA1();
+
+        $request_status = OAuthRequest::from_consumer_and_token($consumer, $this->token, "GET", $this->endpoint, $params);
+
+        $request_status->set_parameter("pesapal_merchant_reference", $pesapal_merchant_reference);
+
+        $request_status->set_parameter("pesapal_transaction_tracking_id",  $pesapal_transaction_tracking_id);
+
+        $request_status->sign_request($signature_method, $consumer, $this->token);
+
+
+
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $request_status);
+
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+
+        curl_setopt($ch, CURLOPT_HEADER, 1);
+
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+
+        if (defined('CURL_PROXY_REQUIRED')) if (CURL_PROXY_REQUIRED == 'True') {
+
+            $proxy_tunnel_flag = (defined('CURL_PROXY_TUNNEL_FLAG') && strtoupper(CURL_PROXY_TUNNEL_FLAG) == 'FALSE') ? false : true;
+
+            curl_setopt($ch, CURLOPT_HTTPPROXYTUNNEL, $proxy_tunnel_flag);
+
+            curl_setopt($ch, CURLOPT_PROXYTYPE, CURLPROXY_HTTP);
+
+            curl_setopt($ch, CURLOPT_PROXY, CURL_PROXY_SERVER_DETAILS);
+        }
+
+        $response = curl_exec($ch);
+
+        $header_size = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
+
+        $raw_header  = substr($response, 0, $header_size - 4);
+
+        $headerArray = explode("\r\n\r\n", $raw_header);
+        $header      = $headerArray[count($headerArray) - 1];
+
+        $elements = preg_split("/=/", substr($response, $header_size));
+        $status = $elements[1];
+        curl_close($ch);
+
+        return $status;
+    }
 
     public function construct_xml_request()
     {
