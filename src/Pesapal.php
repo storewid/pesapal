@@ -230,61 +230,38 @@ class Pesapal
         }
     }
 
-    //this functionality queries for status of the transaction
-    public function queryStatus($pesapal_merchant_reference, $pesapal_transaction_tracking_id)
-    {
-        $params = NULL;
-
-        $consumer = new OAuthConsumer($this->key, $this->secret);
-
-        $signature_method = new OAuthSignatureMethod_HMAC_SHA1();
-
-        $request_status = OAuthRequest::from_consumer_and_token($consumer, $this->token, "GET", $this->endpoint, $params);
-
-        $request_status->set_parameter("pesapal_merchant_reference", $pesapal_merchant_reference);
-
-        $request_status->set_parameter("pesapal_transaction_tracking_id",  $pesapal_transaction_tracking_id);
-
-        $request_status->sign_request($signature_method, $consumer, $this->token);
 
 
 
+//pesapal version 3
+    public function status_query($tracking_id){
 
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $request_status);
+        $curl = curl_init();
 
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+curl_setopt_array($curl, array(
+  CURLOPT_URL => $this->endpoint.'/api/Transactions/GetTransactionStatus?orderTrackingId='.$tracking_id,
+  CURLOPT_RETURNTRANSFER => true,
+  CURLOPT_ENCODING => '',
+  CURLOPT_MAXREDIRS => 10,
+  CURLOPT_TIMEOUT => 0,
+  CURLOPT_FOLLOWLOCATION => true,
+  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+  CURLOPT_CUSTOMREQUEST => 'GET',
+  CURLOPT_HTTPHEADER => array(
+    'Accept: application/json',
+    'Content-Type: application/json'
+  ),
+));
 
-        curl_setopt($ch, CURLOPT_HEADER, 1);
+$response = curl_exec($curl);
 
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+curl_close($curl);
 
-        if (defined('CURL_PROXY_REQUIRED')) if (CURL_PROXY_REQUIRED == 'True') {
+return $response;
 
-            $proxy_tunnel_flag = (defined('CURL_PROXY_TUNNEL_FLAG') && strtoupper(CURL_PROXY_TUNNEL_FLAG) == 'FALSE') ? false : true;
 
-            curl_setopt($ch, CURLOPT_HTTPPROXYTUNNEL, $proxy_tunnel_flag);
-
-            curl_setopt($ch, CURLOPT_PROXYTYPE, CURLPROXY_HTTP);
-
-            curl_setopt($ch, CURLOPT_PROXY, CURL_PROXY_SERVER_DETAILS);
-        }
-
-        $response = curl_exec($ch);
-
-        $header_size = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
-
-        $raw_header  = substr($response, 0, $header_size - 4);
-
-        $headerArray = explode("\r\n\r\n", $raw_header);
-        $header      = $headerArray[count($headerArray) - 1];
-
-        $elements = preg_split("/=/", substr($response, $header_size));
-        $status = $elements[1];
-        curl_close($ch);
-
-        return $status;
     }
+
 
     public function construct_xml_request()
     {
