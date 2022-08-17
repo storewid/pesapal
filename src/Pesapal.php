@@ -167,10 +167,9 @@ class Pesapal
         $response = curl_exec($curl);
 
         curl_close($curl);
-        $res = json_encode($response);
 
 
-        return $res;
+        return $response;
     }
 
 
@@ -179,7 +178,7 @@ class Pesapal
     public function ipn($pesapal_merchant_reference, $pesapal_transaction_tracking_id, $pesapalnotification)
     {
         if ($pesapalnotification == "CHANGE" && $pesapal_transaction_tracking_id != '') {
-            $status = $this->queryStatus($pesapal_merchant_reference, $pesapal_transaction_tracking_id);
+            $status = $this->status_query($pesapal_transaction_tracking_id);
             return $status;
         }
     }
@@ -187,35 +186,32 @@ class Pesapal
 
 
 
-//pesapal version 3
-    public function status_query($tracking_id){
-
+    //pesapal version 3
+    public function status_query($tracking_id)
+    {
+        $this->getToken();
         $curl = curl_init();
 
-curl_setopt_array($curl, array(
-  CURLOPT_URL => $this->endpoint.'/api/Transactions/GetTransactionStatus?orderTrackingId='.$tracking_id,
-  CURLOPT_RETURNTRANSFER => true,
-  CURLOPT_ENCODING => '',
-  CURLOPT_MAXREDIRS => 10,
-  CURLOPT_TIMEOUT => 0,
-  CURLOPT_FOLLOWLOCATION => true,
-  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-  CURLOPT_CUSTOMREQUEST => 'GET',
-  CURLOPT_HTTPHEADER => array(
-    'Accept: application/json',
-    'Content-Type: application/json'
-  ),
-));
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => $this->endpoint . '/api/Transactions/GetTransactionStatus?orderTrackingId=' . $tracking_id,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'GET',
+            CURLOPT_HTTPHEADER => array(
+                'Authorization: Bearer ' . $this->token,
+                'Accept: application/json',
+                'Content-Type: application/json'
+            ),
+        ));
 
-$response = curl_exec($curl);
+        $response = curl_exec($curl);
 
-curl_close($curl);
+        curl_close($curl);
 
-return $response;
-
-
+        return $response;
     }
-
-
-
 }
