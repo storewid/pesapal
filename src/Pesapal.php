@@ -76,6 +76,8 @@ class Pesapal
     public function registerIpn($ipn_url)
     {
 
+        $token = $this->getToken();
+
         $curl = curl_init();
 
         curl_setopt_array($curl, array(
@@ -93,7 +95,7 @@ class Pesapal
 }
 ',
             CURLOPT_HTTPHEADER => array(
-                'Authorization: Bearer ' . $this->token,
+                'Authorization: Bearer ' . $token,
                 'Content-Type: application/json',
             ),
         ));
