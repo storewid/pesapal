@@ -175,7 +175,7 @@ class Pesapal
 
 
     //instatnt push notification
-    public function ipn($pesapal_merchant_reference, $pesapal_transaction_tracking_id, $pesapalnotification)
+    public function ipn($pesapal_transaction_tracking_id, $pesapalnotification)
     {
         if ($pesapalnotification == "CHANGE" && $pesapal_transaction_tracking_id != '') {
             $status = $this->status_query($pesapal_transaction_tracking_id);
@@ -211,6 +211,89 @@ class Pesapal
         $response = curl_exec($curl);
 
         curl_close($curl);
+
+        return $response;
+    }
+
+    public function refund_request($confirmation_code, $amount, $username, $remarks)
+    {
+
+        $this->getToken();
+
+
+        $token = $this->token;
+
+        $curl = curl_init();
+
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => $this->endpoint . '/api/Transactions/RefundRequest',
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'POST',
+            CURLOPT_POSTFIELDS => '
+{
+    "confirmation_code": "' . $confirmation_code . '",
+    "amount": ' . $amount . ',
+    "remarks": "' . $remarks . '",
+    "username": "' . $username . '",
+   
+}
+',
+            CURLOPT_HTTPHEADER => array(
+                'Authorization: Bearer ' . $token,
+                'Content-Type: application/json',
+            ),
+        ));
+
+        $response = curl_exec($curl);
+
+        curl_close($curl);
+
+
+        return $response;
+    }
+
+
+
+    public function cancel_order($order_tracking_id)
+    {
+
+        $this->getToken();
+
+
+        $token = $this->token;
+
+        $curl = curl_init();
+
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => $this->endpoint . '/api/Transactions/CancelOrder',
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'POST',
+            CURLOPT_POSTFIELDS => '
+{
+    "order_tracking_id": "' . $order_tracking_id . '"
+    
+}
+',
+            CURLOPT_HTTPHEADER => array(
+                'Authorization: Bearer ' . $token,
+                'Content-Type: application/json',
+            ),
+        ));
+
+        $response = curl_exec($curl);
+
+        curl_close($curl);
+
 
         return $response;
     }
