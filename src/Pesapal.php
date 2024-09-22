@@ -109,11 +109,10 @@ class Pesapal
     }
 
 
-    public function submitOrder($firstname, $lastname, $phone_number, $email, $amount, $description, $reference, $type = "MERCHANT")
+    public function submitOrder($firstname, $lastname, $phone_number, $email, $amount, $description, $reference, $ipn_url, $type = "MERCHANT")
     {
-        $this->getToken();
-        $this->registerIpn($this->ipn_url);
-
+        $token = $this->getToken();
+        $ipn_id = $this->registerIpn($ipn_url);
         $this->firstname = $firstname;
         $this->lastname = $lastname;
         $this->email = $email;
@@ -123,7 +122,7 @@ class Pesapal
         $this->reference = $reference;
         $this->amount = $amount;
 
-        $token = $this->token;
+        //   $token = $this->token;
 
         $curl = curl_init();
 
@@ -143,7 +142,7 @@ class Pesapal
     "amount": ' . $amount . ',
     "description": "' . $description . '",
     "callback_url": "' . $this->callback . '",
-    "notification_id": "' . $this->ipn_id . '",
+    "notification_id": "' . $ipn_id . '",
     "billing_address": {
         "email_address": "' . $email . '",
         "phone_number": "",
@@ -161,7 +160,7 @@ class Pesapal
 }
 ',
             CURLOPT_HTTPHEADER => array(
-                'Authorization: Bearer ' . $this->token,
+                'Authorization: Bearer ' . $token,
                 'Content-Type: application/json',
             ),
         ));
