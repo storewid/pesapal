@@ -109,10 +109,9 @@ class Pesapal
     }
 
 
-    public function submitOrder($firstname, $lastname, $phone_number, $email, $amount, $description, $reference, $ipn_url, $type = "MERCHANT")
+    public function submitOrder($firstname, $lastname, $phone_number, $email, $amount, $description, $reference, $ipn_id, $type = "MERCHANT")
     {
         $token = $this->getToken();
-        $ipn_id = $this->registerIpn($ipn_url);
         $this->firstname = $firstname;
         $this->lastname = $lastname;
         $this->email = $email;
